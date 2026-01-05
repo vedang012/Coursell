@@ -1,4 +1,4 @@
-package com.vedang.coursell.dto.auth;
+package com.vedang.coursell.dto;
 
 import com.vedang.coursell.model.Role;
 

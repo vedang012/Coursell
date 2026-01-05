@@ -1,9 +1,8 @@
 package com.vedang.coursell.controller;
 
-import com.vedang.coursell.dto.auth.AuthResponse;
-import com.vedang.coursell.dto.auth.LoginRequest;
-import com.vedang.coursell.dto.auth.RegisterRequest;
-import com.vedang.coursell.model.User;
+import com.vedang.coursell.dto.AuthResponse;
+import com.vedang.coursell.dto.LoginRequest;
+import com.vedang.coursell.dto.RegisterRequest;
 import com.vedang.coursell.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
