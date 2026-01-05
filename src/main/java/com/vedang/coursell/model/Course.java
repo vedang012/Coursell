@@ -28,7 +28,7 @@ public class Course {
     @NotNull
     private String courseName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     @NotNull
     private String description;
 

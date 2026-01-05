@@ -9,10 +9,10 @@ import com.vedang.coursell.repository.CourseRepo;
 import com.vedang.coursell.repository.CreatorProfileRepo;
 import com.vedang.coursell.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,13 +41,31 @@ public class CourseService {
 
     }
 
-    public List<CourseResponse> getAllCourses() {
-        List<CourseResponse> list = new ArrayList<>();
-        List<Course> courses = courseRepo.findAll();
+    public Page<CourseResponse> getAllCourses(String search, Pageable pageable) {
 
-        for (Course course : courses) {
-            list.add(new CourseResponse(course.getId(), course.getCourseName(), course.getCreator().getUser().getName(), course.getPrice()));
+        Page<Course> page;
+
+        if(search == null || search.isBlank()) {
+            page = courseRepo.findAll(pageable);
+        } else {
+            page = courseRepo.searchCourses(search, pageable);
         }
-        return list;
+
+        return page.map(course -> new CourseResponse(
+                        course.getId(),
+                        course.getCourseName(),
+                        course.getCreator().getUser().getName(),
+                        course.getPrice(),
+                        course.getDescription()
+                ));
+
+    }
+
+    public void deleteCourse(Long id, User user) {
+        Course course = courseRepo.findById(id).orElseThrow();
+        if (!course.getCreator().getUser().getId().equals(user.getId()) && user.getRole() != Role.ADMIN) {
+            throw new RuntimeException("Not allowed to delete this course");
+        }
+        courseRepo.delete(course);
     }
 }

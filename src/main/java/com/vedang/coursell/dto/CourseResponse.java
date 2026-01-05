@@ -6,5 +6,6 @@ public record CourseResponse(
         Long id,
         String name,
         String creatorName,
-        BigDecimal price
+        BigDecimal price,
+        String description
 ) {}
