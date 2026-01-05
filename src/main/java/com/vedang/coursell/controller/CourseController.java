@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,7 +23,7 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    @RolesAllowed({"CREATOR, ADMIN"})
+    @RolesAllowed({"CREATOR", "ADMIN"})
     @PostMapping("/new")
     public ResponseEntity<?> newCourse(@Valid @RequestBody CreateCourseRequest courseRequest, @AuthenticationPrincipal User user) {
 
@@ -46,7 +45,7 @@ public class CourseController {
     @RolesAllowed({"CREATOR", "ADMIN"})
     public ResponseEntity<?> deleteCourse(@PathVariable Long id, @AuthenticationPrincipal User user) {
         courseService.deleteCourse(id, user);
-        return ResponseEntity.ok().body("deleted");
+        return ResponseEntity.noContent().build();
     }
 
 
