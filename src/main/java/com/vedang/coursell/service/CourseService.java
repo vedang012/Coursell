@@ -2,15 +2,10 @@ package com.vedang.coursell.service;
 
 import com.vedang.coursell.dto.CourseResponse;
 import com.vedang.coursell.dto.CreateCourseRequest;
+import com.vedang.coursell.dto.LessonResponse;
 import com.vedang.coursell.dto.NewLessonRequest;
-import com.vedang.coursell.model.Course;
-import com.vedang.coursell.model.Lesson;
-import com.vedang.coursell.model.Role;
-import com.vedang.coursell.model.User;
-import com.vedang.coursell.repository.CourseRepo;
-import com.vedang.coursell.repository.CreatorProfileRepo;
-import com.vedang.coursell.repository.LessonRepo;
-import com.vedang.coursell.repository.UserRepo;
+import com.vedang.coursell.model.*;
+import com.vedang.coursell.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,10 +19,9 @@ import org.springframework.stereotype.Service;
 
 public class CourseService {
 
-    private final UserRepo userRepo;
     private final CourseRepo courseRepo;
-    private final CreatorProfileRepo creatorProfileRepo;
     private final LessonRepo lessonRepo;
+    private final EnrollmentRepo enrollmentRepo;
 
     public void newCourse(CreateCourseRequest courseRequest, User user) {
 
@@ -104,6 +98,38 @@ public class CourseService {
         }
 
         lessonRepo.deleteById(lessonId);
+
+    }
+
+    public Page<LessonResponse> getAllLessons(Long courseId, String search, Pageable pageable) {
+        Page<Lesson> page;
+
+        if (search == null || search.isBlank()) {
+            page = lessonRepo.findAllByCourseId(courseId, pageable);
+        } else {
+            page = lessonRepo.searchLessonsInCourse(courseId, search, pageable);
+        }
+
+        return page.map(lesson -> new LessonResponse(
+                lesson.getId(),
+                lesson.getTitle(),
+                lesson.getFileKey()
+        ));
+    }
+
+    public void enroll(Long courseId, User user) {
+
+        if (enrollmentRepo.existsByCourseIdAndStudentId(courseId, user.getId())) {
+            throw new IllegalStateException("You are already enrolled in this course");
+        }
+
+        Course course = courseRepo.findById(courseId).orElseThrow();
+        Enrollment enrollment = Enrollment.builder()
+                .course(course)
+                .student(user)
+                .build();
+
+        enrollmentRepo.save(enrollment);
 
     }
 }

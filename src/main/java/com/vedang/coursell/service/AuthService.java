@@ -35,6 +35,7 @@ public class AuthService {
         return new AuthResponse(token);
     }
 
+
     public AuthResponse login(LoginRequest loginRequest) {
         User user = userRepo.findByEmail(loginRequest.email());
         if (user == null) {
