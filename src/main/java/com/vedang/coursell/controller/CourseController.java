@@ -2,6 +2,7 @@ package com.vedang.coursell.controller;
 
 import com.vedang.coursell.dto.CourseResponse;
 import com.vedang.coursell.dto.CreateCourseRequest;
+import com.vedang.coursell.dto.NewLessonRequest;
 import com.vedang.coursell.model.User;
 import com.vedang.coursell.service.CourseService;
 import jakarta.annotation.security.RolesAllowed;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +47,20 @@ public class CourseController {
     @RolesAllowed({"CREATOR", "ADMIN"})
     public ResponseEntity<?> deleteCourse(@PathVariable Long id, @AuthenticationPrincipal User user) {
         courseService.deleteCourse(id, user);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAnyRole('CREATOR','ADMIN')")
+    @PostMapping("/{id}/lesson/new")
+    public ResponseEntity<?> newLessonRequest(@RequestBody @Valid NewLessonRequest newLessonRequest, @AuthenticationPrincipal User user, @PathVariable Long id) {
+        courseService.addNewLesson(newLessonRequest, id, user);
+        return ResponseEntity.ok("new lesson created");
+    }
+
+    @PreAuthorize("hasAnyRole('CREATOR','ADMIN')")
+    @DeleteMapping("/{courseId}/lesson/{lessonId}")
+    public ResponseEntity<?> deleteLesson(@PathVariable Long lessonId, @PathVariable long courseId, @AuthenticationPrincipal User user) {
+        courseService.deleteLesson(lessonId, courseId, user);
         return ResponseEntity.noContent().build();
     }
 
