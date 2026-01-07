@@ -1,7 +1,7 @@
 # 🎓 Coursell
 
 **Coursell** is a backend-focused digital course marketplace built with **Java & Spring Boot**.  
-It is designed as a real-world system with strong emphasis on architecture, security, scalability, and clean API design.
+It is designed as a real-world system with strong emphasis on architecture, security, and clean API design.
 
 ---
 
