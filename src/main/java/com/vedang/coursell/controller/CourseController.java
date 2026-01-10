@@ -1,5 +1,6 @@
 package com.vedang.coursell.controller;
 
+import com.razorpay.RazorpayException;
 import com.vedang.coursell.dto.CourseResponse;
 import com.vedang.coursell.dto.CreateCourseRequest;
 import com.vedang.coursell.dto.LessonResponse;
@@ -77,11 +78,9 @@ public class CourseController {
     @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
     @PostMapping("/{id}/pay")
     public ResponseEntity<?> pay(@PathVariable(name = "id") Long courseId,
-                                    @AuthenticationPrincipal User user) {
+                                    @AuthenticationPrincipal User user) throws RazorpayException {
 
-        courseService.enroll(courseId, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Enrolled");
-
+        return courseService.order(courseId, user);
     }
 
 

@@ -3,6 +3,7 @@ package com.vedang.coursell.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,31 +18,29 @@ public class PaymentInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Who paid
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // What they paid for
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    // Money stuff
     @Column(nullable = false)
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(nullable = false)
-    private String currency; // "INR", "USD"
+    private String currency;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus status; // PENDING, SUCCESS, FAILED, REFUNDED
+    private PaymentStatus status;
 
-    // Gateway reference
     @Column(unique = true)
-    private String providerPaymentId;
+    private String razorpayOrderId;
 
-    // Audit
+    @Column(unique = true)
+    private String razorpayPaymentId;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
