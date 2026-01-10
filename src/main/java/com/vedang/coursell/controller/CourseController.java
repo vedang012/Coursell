@@ -75,8 +75,8 @@ public class CourseController {
 
 
     @PreAuthorize("hasAnyRole('STUDENT', 'ADMIN')")
-    @PostMapping("/{id}/enroll")
-    public ResponseEntity<?> enroll(@PathVariable(name = "id") Long courseId,
+    @PostMapping("/{id}/pay")
+    public ResponseEntity<?> pay(@PathVariable(name = "id") Long courseId,
                                     @AuthenticationPrincipal User user) {
 
         courseService.enroll(courseId, user);

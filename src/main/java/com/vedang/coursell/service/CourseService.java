@@ -117,6 +117,8 @@ public class CourseService {
         ));
     }
 
+
+
     public void enroll(Long courseId, User user) {
 
         if (enrollmentRepo.existsByCourseIdAndStudentId(courseId, user.getId())) {
