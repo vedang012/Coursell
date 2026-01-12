@@ -153,7 +153,6 @@ public class CourseService {
     }
 
 
-
     public void enroll(Course course, User user) {
 
         Enrollment enrollment = Enrollment.builder()
@@ -164,4 +163,43 @@ public class CourseService {
         enrollmentRepo.save(enrollment);
 
     }
+
+//    public void handleWebhook( String payload, String signature) {
+//
+//        verifySignature(payload, signature);
+//
+//        JSONObject json = new JSONObject(payload);
+//        String orderId = json.getJSONObject("payload")
+//                .getJSONObject("payment")
+//                .getJSONObject("entity")
+//                .getString("order_id");
+//
+//        PaymentInfo payment = paymentInfoRepo.findByRazorpayOrderId(orderId)
+//                .orElseThrow();
+//
+//        payment.setStatus(PaymentStatus.SUCCESS);
+//        payment.setRazorpayPaymentId(...);
+//
+//        paymentInfoRepo.save(payment);
+//
+//        enroll(payment.getCourse(), payment.getUser());
+//
+//    }
+//
+//    public boolean verifySignature(String payload, String actualSignature, String secret) {
+//        try {
+//            Mac mac = Mac.getInstance("HmacSHA256");
+//            SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
+//            mac.init(keySpec);
+//
+//            byte[] hash = mac.doFinal(payload.getBytes(StandardCharsets.UTF_8));
+//            String expectedSignature = Base64.getEncoder().encodeToString(hash);
+//
+//            return expectedSignature.equals(actualSignature);
+//        } catch (Exception e) {
+//            throw new RuntimeException("Signature verification failed");
+//        }
+//    }
+
+
 }

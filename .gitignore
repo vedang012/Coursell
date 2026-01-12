@@ -34,3 +34,7 @@ build/
 
 # Ignore application properties (local configuration)
 src/main/resources/application.properties
+
+#node modules
+
+frontend/coursell-frontend/node_modules
